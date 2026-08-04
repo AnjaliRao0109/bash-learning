@@ -1,45 +1,81 @@
-#q1. Write a script that accepts two arguments: First name, Last name
-echo $1 $2 ' > echo $1 $2 '
-args_name=("$@")
-echo ${args_name[0]} ${args_name[1]}
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
 
-#q2. Write a script that accepts three numbers and prints them.
-echo $1 $2 $3 ' > echo $1 $2 $3 '
-args_num=("$@")
-echo ${args_num[0]} ${args_num[1]} ${args_num[2]}
+# Demo script for argument-handling exercises (Q1..Q8).
+# Run examples:
+#   bash argspractice2.sh Alice Bob 10 20 30 Red Green Blue Yellow A B C D E
 
-#q3. Write a script that prints:
-#a. Script name
-#b. First argument
-#c. Second argument
-#d. Third argument
-echo $0 $1 $2 $3 '> echo $0 $1 $2 $3'
+if [ "$#" -lt 1 ]; then
+  cat <<EOF
+Usage: $0 <args...>
+This script demonstrates solutions to several argument-related problems.
+Provide at least 1 argument; some demos require more (see comments).
+EOF
+  exit 1
+fi
 
-#q4. Write a script that prints all the arguments using: echo $@
-#Run: bash script.sh Linux Bash Git Python
+# Put all positional args into an array for easier handling.
 args=("$@")
-echo ${args[0]} ${args[1]} ${args[2]} ${args[3]}
 
-#q5. Run: bash script.sh A B C D E
-#What will this print? echo $@
-args=("$@")
-echo ${args[0]} ${args[1]} ${args[2]} ${args[3]} ${args[4]} ${args[5]}
+# Q1: Accept two arguments: First name, Last name
+q1() {
+  printf "Q1: First Last: %s %s\n" "${args[0]:-}" "${args[1]:-}"
+}
 
-#q6. Run: bash script.sh Red Green Blue Yellow
-#Print only: Green, Yellow
-colors=("$@")
-echo ${colors[1]} ${colors[3]}
+# Q2: Accept three numbers and prints them
+q2() {
+  printf "Q2: Three numbers: %s %s %s\n" "${args[0]:-}" "${args[1]:-}" "${args[2]:-}"
+}
 
-#q7. Store arguments in an array and print them in reverse order.
-#Example:
-#Input: bash script.sh A B C D
-#Output:D C B A
-num=("$@")
-echo ${num[3]} ${num[2]} ${num[1]} ${num[0]}
+# Q3: Print script name and first three arguments
+q3() {
+  printf "Q3: Script name: %s\n" "$0"
+  printf "    First arg: %s\n" "${args[0]:-}"
+  printf "    Second arg: %s\n" "${args[1]:-}"
+  printf "    Third arg: %s\n" "${args[2]:-}"
+}
 
-#q8. Write a script that prints the number of command-line arguments.
-#Example: bash script.sh Apple Mango Orange
-#Output: Number of arguments: 3
-args=("$@")
-echo ${args[0]} ${args[1]} ${args[2]} ${args[3]}
-echo $#
+# Q4: Print all arguments using "\$@"
+q4() {
+  printf "Q4: All args (using \"\$@\"):"
+  printf " %s" "${args[@]}"
+  printf "\n"
+}
+
+# Q5: Demonstrate echo $@ behaviour
+q5() {
+  printf "Q5: echo \$@ prints all positional parameters separated by spaces:\n"
+  printf "    ->"
+  printf " %s" "$@"
+  printf "\n"
+}
+
+# Q6: Given args Red Green Blue Yellow, print Green, Yellow
+q6() {
+  printf "Q6: Selected: %s, %s\n" "${args[1]:-}" "${args[3]:-}"
+}
+
+# Q7: Print arguments in reverse order (generic)
+q7() {
+  printf "Q7: Reverse order:"
+  for ((i=${#args[@]}-1; i>=0; i--)); do
+    printf " %s" "${args[i]}"
+  done
+  printf "\n"
+}
+
+# Q8: Print number of command-line arguments
+q8() {
+  printf "Q8: Number of arguments: %d\n" "$#"
+}
+
+# Run all demos (you can call functions separately if you prefer)
+q1
+q2
+q3
+q4
+q5
+q6
+q7
+q8
