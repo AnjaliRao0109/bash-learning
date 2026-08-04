@@ -1,4 +1,3 @@
-#CLASS 4:
 #How to pass arguments in a bash shell script?
 
 ##The no. of arguments passed will be stored like this consecutively
